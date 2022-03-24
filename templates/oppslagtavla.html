@@ -1,0 +1,26 @@
+{% extends 'index.html' %} {% block body %}
+    <header>
+        <h1>Oppslagtavla</h1>
+    </header>
+    <div class="board-container">
+        <nav>
+            {% for kat in categories %}
+                <a class="category-select" href="{{ url_for('category', id=kat.kat_id) }}">{{ kat.navn }}</a>
+            {% endfor %}
+            <a class="all category-select" href="/">SHOW ALL</a>
+        </nav>
+        <section class="message-list">
+            {% for post in result %}
+                <div class="post_button">
+                    <a href="{{ url_for('message', id=post.id) }}">
+                        <h3>{{ post.tittel }}</h3>
+                        <h4>{{ post.ingress }}</h4>
+                        <h6>{{ post.dato }} <span style="float:right">Hits: {{ post.treff }}</span></h6>
+                    </a>
+                </div>
+
+            {% endfor %}
+
+        </section>
+    </div>
+{% endblock %}

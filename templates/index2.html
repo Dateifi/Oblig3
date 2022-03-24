@@ -1,0 +1,66 @@
+{% extends 'index.html' %} {% block body %}
+    <header>
+        <h2 class="mb-2">Please fill the message board database</h2>
+    </header>
+    <!-- Display message -->
+    {% if message %}
+        <div class="alert alert-danger message" role="alert">{{ message | safe }}</div>
+    {% endif %}
+    <form action="/category" method="POST">
+        <div class="mb-3">
+            <select name="kategori" class="form-select">
+                <option disabled selected value="">Select a category</option>
+                <option value="1">Cars and Motorcycles</option>
+                <option value="2">Furniture</option>
+                <option value="3">Electronics</option>
+                <option value="4">Properties for Rent</option>
+                <option value="5">Help Wanted</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <input
+                    type="text"
+                    name="tittel"
+                    placeholder="Titel"
+                    class="form-control"
+                    autofocus
+            />
+        </div>
+        <div class="mb-3">
+            <input
+                    type="text"
+                    name="ingress"
+                    class="form-control"
+                    placeholder="Short Description"
+            />
+        </div>
+        <div class="mb-3 ">
+            <textarea
+                name="oppslagstekst"
+                placeholder="Your ad goes here"
+                class="form-control"
+                rows="8"
+            ></textarea>
+        </div>
+        <div class="mb-3">
+            <input
+                    type="text"
+                    name="bruker"
+                    placeholder="Username"
+                    class="form-control"
+                    autofocus
+            />
+        </div>
+        <div class="mb-3">
+            <input
+                    type="date"
+                    name="dato"
+                    class="form-control"
+                    autofocus
+            />
+        </div>
+        <div class="d-grid">
+            <input type="submit" value="Submit" class="btn btn-primary btn-block"/>
+        </div>
+    </form>
+{% endblock %}
