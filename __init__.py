@@ -1,7 +1,7 @@
 from flask import Flask, render_template, flash, url_for, redirect
 import mysql.connector
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, TextAreaField, DateField
+from wtforms import StringField, SubmitField, SelectField, TextAreaField, DateField, HiddenField
 from wtforms.validators import InputRequired
 from datetime import date
 
@@ -36,6 +36,12 @@ class RegisterForm(FlaskForm):
 
     dato = DateField('Post date:', format='%Y-%m-%d', default=today, validators=[InputRequired()])
 
+    submit = SubmitField('Submit')
+
+class EditForm(FlaskForm):
+    kategori = SelectField("Category", choices=[('1', 'Cars and Motorcycles'), ('2', 'Furniture'), ('3', 'Electronics'),
+                                                ('4', 'Properties for Rent'), ('5', 'Help Wanted')],
+                           validate_choice=True)
     submit = SubmitField('Submit')
 
 
@@ -79,15 +85,16 @@ def addpost():
         return render_template('addpost.html', form=form)
 
 
-@app.route('/edit<int:id>', methods=['GET', 'POST'])
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
-    form = RegisterForm()
-    if form.validate_on_submit():
+    edit_form = EditForm()
+    if edit_form.validate_on_submit():
         with connection.cursor(dictionary=True) as cursor:
-            cursor.execute('UPDATE oppslag SET kategori = %s WHERE id = %s', [form.kategori.data, id])
+            cursor.execute('UPDATE oppslag SET kategori = %s WHERE id = %s', [edit_form.kategori.data, id])
             connection.commit()
-        return redirect(url_for('index'))
-    return redirect(url_for('index'))
+            return redirect(url_for('index'))
+    else:
+        return render_template('edit.html', edit_form=edit_form)
 
 @app.route('/delete<int:id>')
 def delete(id):
