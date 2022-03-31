@@ -12,11 +12,28 @@
                 {{ message }}
                 </div>
             {% endfor %}
-            <h1 class="mb-3">Edit category</h1>
+            <h1 class="mb-3">Edit post</h1>
             <form method="POST">
                 {{ edit_form.csrf_token() }}
                 <div class="mb-3">
+                    {% set f = edit_form.kategori.process_data(kat) %}
                     {{ edit_form.kategori(class='form-control') }}
+                </div>
+                <div class="mb-3">
+                    {{ edit_form.tittel(class='form-control', value=tit) }}
+                </div>
+                <div class="mb-3">
+                    {{ edit_form.ingress(class='form-control', value=ing) }}
+                </div>
+                <div class="mb-3">
+                    {% set f = edit_form.oppslagtekst.process_data(opp) %}
+                    {{ edit_form.oppslagtekst(class='form-control') }}
+                </div>
+                <div class="mb-3">
+                    {{ edit_form.bruker(class='form-control', value=bru) }}
+                </div>
+                <div class="mb-3">
+                    {{ edit_form.dato(class='form-control', value=dat) }}
                 </div>
                 <div class="mb-3">
                     {{ edit_form.submit(class='btn btn-rounded') }}

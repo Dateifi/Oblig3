@@ -87,14 +87,19 @@ def addpost():
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
-    edit_form = EditForm()
+    with connection.cursor(dictionary=True) as cursor:
+        cursor.execute('SELECT * FROM oppslag WHERE id = %s', [id])
+        post = cursor.fetchall()
+    kat, tit, ing, opp, bru, dat = post[0]['kategori'], post[0]['tittel'], post[0]['ingress'], post[0]['oppslagtekst'], post[0]['bruker'], post[0]['dato']
+    edit_form = RegisterForm()
     if edit_form.validate_on_submit():
         with connection.cursor(dictionary=True) as cursor:
-            cursor.execute('UPDATE oppslag SET kategori = %s WHERE id = %s', [edit_form.kategori.data, id])
+            cursor.execute('UPDATE oppslag SET kategori = %s, tittel= %s, ingress= %s, oppslagtekst= %s, bruker= %s, dato= %s, treff= %s WHERE id = %s', [edit_form.kategori.data, edit_form.tittel.data, edit_form.ingress.data, edit_form.oppslagtekst.data, edit_form.bruker.data, edit_form.dato.data, 0, id])
             connection.commit()
             return redirect(url_for('index'))
     else:
-        return render_template('edit.html', edit_form=edit_form)
+        return render_template('edit.html', edit_form=edit_form, kat=kat, tit=tit, ing=ing, opp=opp, bru=bru, dat=dat)
+
 
 @app.route('/delete<int:id>')
 def delete(id):
