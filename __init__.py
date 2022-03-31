@@ -21,7 +21,8 @@ with connection.cursor(dictionary=True) as cursor:
 
 
 class RegisterForm(FlaskForm):
-    kategori = SelectField("Category", choices=[('1', 'Cars and Motorcycles'), ('2', 'Furniture'), ('3', 'Electronics'), ('4', 'Properties for Rent'), ('5', 'Help Wanted')],
+    kategori = SelectField("Category", choices=[('1', 'Cars and Motorcycles'), ('2', 'Furniture'), ('3', 'Electronics'),
+                                                ('4', 'Properties for Rent'), ('5', 'Help Wanted')],
                            validate_choice=True)
 
     tittel = StringField("Title", validators=[InputRequired()],
@@ -31,12 +32,13 @@ class RegisterForm(FlaskForm):
     oppslagtekst = TextAreaField("Oppslagtekst", validators=[InputRequired()],
                                  render_kw={'autofocus': True, 'placeholder': 'Your text'})
     bruker = StringField("Username", validators=[InputRequired()],
-                       render_kw={'autofocus': True, 'placeholder': 'Your username'})
+                         render_kw={'autofocus': True, 'placeholder': 'Your username'})
     today = date.today()
 
     dato = DateField('Post date:', format='%Y-%m-%d', default=today, validators=[InputRequired()])
 
     submit = SubmitField('Submit')
+
 
 class EditForm(FlaskForm):
     kategori = SelectField("Category", choices=[('1', 'Cars and Motorcycles'), ('2', 'Furniture'), ('3', 'Electronics'),
@@ -77,7 +79,9 @@ def addpost():
     if form.validate_on_submit():
         with connection.cursor(dictionary=True) as cursor:
             cursor.execute(
-                "INSERT INTO `oppslag`(kategori, tittel, ingress, oppslagtekst, bruker, dato, treff) VALUES (%s, %s, %s, %s, %s, %s, %s)", [form.kategori.data, form.tittel.data, form.ingress.data, form.oppslagtekst.data, form.bruker.data, form.dato.data, 0])
+                "INSERT INTO `oppslag`(kategori, tittel, ingress, oppslagtekst, bruker, dato, treff) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                [form.kategori.data, form.tittel.data, form.ingress.data, form.oppslagtekst.data, form.bruker.data,
+                 form.dato.data, 0])
             connection.commit()
         flash('Post created', 'success')
         return redirect(url_for('index'))
@@ -90,11 +94,15 @@ def edit(id):
     with connection.cursor(dictionary=True) as cursor:
         cursor.execute('SELECT * FROM oppslag WHERE id = %s', [id])
         post = cursor.fetchall()
-    kat, tit, ing, opp, bru, dat = post[0]['kategori'], post[0]['tittel'], post[0]['ingress'], post[0]['oppslagtekst'], post[0]['bruker'], post[0]['dato']
+    kat, tit, ing, opp, bru, dat = post[0]['kategori'], post[0]['tittel'], post[0]['ingress'], post[0]['oppslagtekst'], \
+                                   post[0]['bruker'], post[0]['dato']
     edit_form = RegisterForm()
     if edit_form.validate_on_submit():
         with connection.cursor(dictionary=True) as cursor:
-            cursor.execute('UPDATE oppslag SET kategori = %s, tittel= %s, ingress= %s, oppslagtekst= %s, bruker= %s, dato= %s, treff= %s WHERE id = %s', [edit_form.kategori.data, edit_form.tittel.data, edit_form.ingress.data, edit_form.oppslagtekst.data, edit_form.bruker.data, edit_form.dato.data, 0, id])
+            cursor.execute(
+                'UPDATE oppslag SET kategori = %s, tittel= %s, ingress= %s, oppslagtekst= %s, bruker= %s, dato= %s, treff= %s WHERE id = %s',
+                [edit_form.kategori.data, edit_form.tittel.data, edit_form.ingress.data, edit_form.oppslagtekst.data,
+                 edit_form.bruker.data, edit_form.dato.data, 0, id])
             connection.commit()
             return redirect(url_for('index'))
     else:
@@ -107,7 +115,6 @@ def delete(id):
         cursor.execute('DELETE FROM `oppslag` WHERE id = %s', [id])
         connection.commit()
         return redirect(url_for('index'))
-
 
 
 if __name__ == "__main__":
