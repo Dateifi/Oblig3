@@ -60,9 +60,52 @@ section {
 
 }
 
+.form-control {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+    color: #212529;
+    background-color: #fff;
+    line-height: 1.5;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border-radius: .25rem;
+}
+
+.mb-3 {
+    margin-bottom: 1rem;
+}
+
 .board-container {
     display: flex;
     flex-direction: row;
+}
+
+.container {
+    max-width: 70%;
+    margin: auto;
+    padding: 0 2rem;
+}
+
+.alert {
+    color: white;
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 20px;
+    border-radius: 10px;
+    transition: 1s;
+
+}
+
+.success {
+    background-color: #04aa6d;
+}
+
+.error {
+    background-color: red;
 }
 
 .mb-2 h2 {
@@ -71,6 +114,16 @@ section {
 
 .btn {
     font-size: 22px;
+}
+
+.addpost {
+    text-align: center;
+    align-items: center;
+    margin: auto;
+    border: 1px solid;
+    color: black;
+    width: 150px;
+
 }
 
 .category-select {
